@@ -62,6 +62,19 @@ contract ERC721Identifier is ERC721Enumerable, AccessControl {
             super.supportsInterface(interfaceId);
     }
 
+    /**
+     * @dev Hook that is called before any token transfer. This includes minting
+     * and burning.
+     *
+     * Calling conditions:
+     *
+     * - When `from` and `to` are both non-zero, ``from``'s `tokenId` will be
+     * transferred to `to`.
+     * - When `from` is zero, `tokenId` will be minted for `to`.
+     * - When `to` is zero, ``from``'s `tokenId` will be burned.
+     * - `from` and `to` are never both zero.
+     **/
+
     function _beforeTokenTransfer(
         address from,
         address to,
@@ -70,12 +83,12 @@ contract ERC721Identifier is ERC721Enumerable, AccessControl {
         console.log("Checking if has minter role");
         require(
             hasRole(MINTER_ROLE, msg.sender),
-            "ERC721Identifer: this digital ID is bound to your wallet.  Contact the minter (Synchrony) if you wish to change the location of your ID"
+            "ERC721Identifer: this digital ID is bound to your wallet.  Contact the minter (Zap) if you wish to change the location of your ID"
         );
-        // require(from == address(0) || to == address(0), "Non transferrable token"); Still debating if I even want Synchrony to have this privilege
+        // require(from == address(0) || to == address(0), "Non transferrable token"); Still debating if I even want Zap to have this privilege
         require(
             (to != address(0)),
-            "This token can not be burned or minted by anyone other than the minter.  Please contact Synchrony if you wish to burn your ID"
+            "This token can not be burned or minted by anyone other than the minter.  Please contact Zap if you wish to burn your ID"
         );
         require(
             (balanceOf(to) == 0),

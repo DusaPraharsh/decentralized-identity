@@ -1,6 +1,5 @@
 const { ethers } = require("ethers");
 const dotenv = require("dotenv");
-const { hexStripZeros } = require("ethers/lib/utils");
 
 dotenv.config();
 
@@ -11,27 +10,33 @@ function hexToBytes(hex) {
 }
 
 const main = async () => {
-  let deployerPrivate = process.env.DEPLOYER_PRIVATE; //wallet
-  const ALCHAPIKEY = process.env.ALCHAPIKEY; //alchemy
-  const ETHERAPIKEY = process.env.ETHERAPIKEY; //etherscan
-  const INFURAAPIKEY = process.env.INFURAAPIKEY; //infura
+  // get private key from .env
+  let deployerprivate = process.env.DEPLOYER_PRIVATE;
+  const ALCHAPIKEY = process.env.ALCHAPIKEY;
+  const ETHERAPIKEY = process.env.ETHERAPIKEY;
+  const INFURAAPIKEY = process.env.INFURAAPIKEY;
 
   console.log(ALCHAPIKEY);
+  // get a web3 provider
   const provider = await ethers.getDefaultProvider("goerli", {
     alchemy: ALCHAPIKEY,
     etherscan: ETHERAPIKEY,
     infura: INFURAAPIKEY,
   });
 
-  console.log(deployerPrivate);
-  deployerPrivate = hexToBytes(deployerPrivate);
+  // Turning string into datahexstring
+  console.log(deployerprivate);
+  deployerprivate = hexToBytes(deployerprivate);
 
-  console.log(ethers.utils.isBytesLike(deployerPrivate));
+  // Making sure that this is private key is a datahexstring
+  console.log(ethers.utils.isBytesLike(deployerprivate));
 
-  const Zap = new ethers.Wallet(deployerPrivate, provider);
+  // Creating wallet instance
+  const Zap = new ethers.Wallet(deployerprivate, provider);
+
   const ZapBalance = await Zap.getBalance();
 
-  await console.log("Deploying contract with account: ", Zap.getAddress());
+  await console.log("Deploying contracts with account: ", Zap.getAddress());
   await console.log("Account balance: ", ZapBalance.toString());
 
   const Token = await hre.ethers.getContractFactory("ERC721Identifier");
@@ -43,7 +48,7 @@ const main = async () => {
   );
   await portal.deployed();
 
-  console.log("Contract Address: ", portal.address);
+  console.log("Contract address: ", portal.address);
 };
 
 const runMain = async () => {
@@ -51,7 +56,7 @@ const runMain = async () => {
     await main();
     process.exit(0);
   } catch (error) {
-    console.log(error);
+    console.error(error);
     process.exit(1);
   }
 };

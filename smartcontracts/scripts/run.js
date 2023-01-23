@@ -16,7 +16,7 @@ const main = async () => {
     "ERC721Identifier"
   );
   const identifierContract = await identifierContractFactory.deploy(
-    "Synchrony Digital ID Collection",
+    "Zap Digital ID Collection",
     "symbol things",
     "https://identifier-database.getsandbox.com/identifiers/"
   );
